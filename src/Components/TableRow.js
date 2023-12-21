@@ -34,6 +34,7 @@ const AddRow = ({addRows, rowId, data, setData}) => {
 
  const handleTextChange = (e)=>{
 
+
     let result = data.filter(entry => entry.id === rowId)[0];
         result = { ...result, id: rowId, [e.target.name]: e.target.value }
 
@@ -60,8 +61,8 @@ const AddRow = ({addRows, rowId, data, setData}) => {
             >
              </Checkbox> 
               </TableCell>
-      <TableCell component="th" scope="row"><TextField  inputProps={{ style: {height: 15 } }} name="key" onChange={(e)=> handleTextChange(e)} /> </TableCell>
-      <TableCell > <TextField inputProps={{ style: {height: 15} }} name="value" onChange={(e)=> handleTextChange(e)}  /> </TableCell>
+      <TableCell component="th" scope="row"><TextField value={ data[rowId]!=undefined ? data[rowId].key: [] }   inputProps={{ style: {height: 15 } }} name="key" onChange={(e)=> handleTextChange(e)} /> </TableCell>
+      <TableCell > <TextField value={ data[rowId]!=undefined ? data[rowId].value: [] } inputProps={{ style: {height: 15} }} name="value" onChange={(e)=> handleTextChange(e)}  /> </TableCell>
     </TableRow>
 
     

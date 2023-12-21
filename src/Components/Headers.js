@@ -21,9 +21,9 @@ function createData(name, calories) {
 
 const HeadersHandler= ()=>{
    
-    const [rows, addRows]= useState([0]);
-    const {headerData, setHeaderData} = useContext(DataContext);
-     console.log(headerData);
+    
+    const {headerData, setHeaderData,rows, addRows} = useContext(DataContext);
+     
     return(
           <div>
         <div><Typography mt={2} mb={2}>Headers</Typography></div>

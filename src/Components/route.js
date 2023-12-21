@@ -5,16 +5,56 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import { DataContext } from "../Context/DataStorage";
+import {checkParams}  from "../Service/Validations"
+import { getHeadersAndParams } from "../Service/Validations";
+import ResponseHandler from "./Response";
+
+ 
 
 const RouteHandler = ()=>{
     const options = ['GET', 'POST','PUT','DELETE'];
     const [value, setValue] = React.useState(options[0]);
     const [inputValue, setInputValue] = React.useState('');
    
+    const [error, setError] = useState(false);
+    const [errorMsg, setErrorMsg] = useState(null)
+    const [errorResponse, setErrorResponse] = useState(false);
+    const [apiResponse, setApiResponse] = useState({})
    
-    const {formData, setFormData  } = useContext(DataContext);
-    
-    
+    const {formData, setFormData, jsonText, headerData, setResponseData, setResponseStatus } = useContext(DataContext);
+    const onSendClick=()=>{
+
+        
+        if(!checkParams(formData, jsonText, headerData, setErrorMsg)) {
+            //setError(true);
+            console.log(errorMsg);
+            return false;
+        }
+
+         handleApiCall();
+        
+
+    }
+
+    const handleApiCall= async() =>{
+  
+        
+        const data = {
+            method: formData.type,
+            headers: getHeadersAndParams(headerData)
+        }
+        if(formData.type!='GET' )
+        {
+            data.body=jsonText;
+        }
+        const response= await fetch( formData.url,data);
+        const resData= await response.json();
+         setResponseData(resData);
+         setResponseStatus(response.status)
+
+    }
+
+
     return (  
 <div style={{display:'flex',flexDirection:'row',justifyContent:'center',alignItems:'center',marginTop:'10px',gap:'10px'}}>
     <div>
@@ -35,14 +75,14 @@ const RouteHandler = ()=>{
     </div>
     <div> 
        
-       <TextField value={formData.url} onChange={(event, newValue) => {
-        setFormData({ ...formData, url: newValue });
+       <TextField value={formData.url} onChange={(e) => {
+        setFormData({ ...formData, url: e.target.value });
       }} fullWidth label="URL" id="fullWidth" sx={{ width: '600px' }} />
        </div>
 
       <div>
-      <Button variant="contained" RUN>
-      RUN
+      <Button variant="contained" size="large" onClick={onSendClick}>
+      SEND
     </Button>
       </div>
 

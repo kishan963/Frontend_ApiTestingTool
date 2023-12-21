@@ -4,10 +4,13 @@ export const DataContext = createContext(null);
 
 const DataStorage = ({ children }) => {
     
-    const [formData, setFormData] = useState({ url: 'fsfs', type: 'POST' })
+    const [formData, setFormData] = useState({ url: '', type: 'POST' })
     const [jsonText, setJsonText] = useState('');
+    const [responseStatus, setResponseStatus] = useState('500');
+    const [responseData, setResponseData] = useState();
     const [paramData, setParamData] = useState([]);
     const [headerData, setHeaderData] = useState([]);
+    const [rows, addRows]= useState([0]);
 
     return (
         <DataContext.Provider
@@ -19,7 +22,13 @@ const DataStorage = ({ children }) => {
                 paramData,
                 setParamData,
                 headerData,
-                setHeaderData
+                setHeaderData,
+                rows,
+                addRows,
+                responseData,
+                setResponseData,
+                responseStatus,
+                setResponseStatus
             }}
         >
             {children}
