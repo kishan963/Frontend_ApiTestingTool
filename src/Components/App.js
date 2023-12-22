@@ -4,6 +4,7 @@ import Home from './Home';
 import CreateTab from './createTab';
 import ResponseHandler from './Response';
 import DataStorage from '../Context/DataStorage';
+import TestResultHandler from './TestResult';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
      <RouteHandler></RouteHandler>
      <CreateTab></CreateTab>
      <ResponseHandler></ResponseHandler>
+     <TestResultHandler></TestResultHandler>
      
    </div> 
   );

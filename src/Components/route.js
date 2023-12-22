@@ -21,13 +21,11 @@ const RouteHandler = ()=>{
     const [errorResponse, setErrorResponse] = useState(false);
     const [apiResponse, setApiResponse] = useState({})
    
-    const {formData, setFormData, jsonText, headerData, setResponseData, setResponseStatus } = useContext(DataContext);
+    const {formData, setFormData, jsonText, headerData,validationText, setResponseData, setResponseStatus, setBackendData } = useContext(DataContext);
     const onSendClick=()=>{
 
         
         if(!checkParams(formData, jsonText, headerData, setErrorMsg)) {
-            //setError(true);
-            console.log(errorMsg);
             return false;
         }
 
@@ -46,9 +44,33 @@ const RouteHandler = ()=>{
         if(formData.type!='GET' )
         {
             data.body=jsonText;
+           
         }
         const response= await fetch( formData.url,data);
-        const resData= await response.json();
+
+        if(formData.type!='GET'){
+        const BackendData = {
+            url: formData.url,
+            method: formData.type,
+            headers: getHeadersAndParams(headerData),
+            body: JSON.parse(jsonText),
+            validation: JSON.parse(validationText)
+        }
+
+        const BackendResponse= await fetch("http://localhost:8080/create", 
+         {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(BackendData)
+         }
+
+        );
+        const backendRes= await BackendResponse.json();
+         console.log(backendRes[0].description)
+         setBackendData(backendRes);
+         console.log(backendRes);
+         } 
+         const resData= await response.json();
          setResponseData(resData);
          setResponseStatus(response.status)
 
@@ -59,7 +81,7 @@ const RouteHandler = ()=>{
 <div style={{display:'flex',flexDirection:'row',justifyContent:'center',alignItems:'center',marginTop:'10px',gap:'10px'}}>
     <div>
         <Autocomplete 
-      value={formData.type}
+      value={formData.type} 
       onChange={(event, newValue) => {
         setFormData({ ...formData, type: newValue });
       }}
@@ -69,8 +91,9 @@ const RouteHandler = ()=>{
       }}
       id="controllable-states-demo"
       options={options}
+      freeSolo 
       sx={{ width: 200 }}
-      renderInput={(params) => <TextField {...params}  />}
+      renderInput={(params) => <TextField {...params} />}
     />
     </div>
     <div> 
