@@ -21,7 +21,7 @@ const RouteHandler = ()=>{
     const [errorResponse, setErrorResponse] = useState(false);
     const [apiResponse, setApiResponse] = useState({})
    
-    const {formData, setFormData, jsonText, headerData,validationText, setResponseData, setResponseStatus, setBackendData } = useContext(DataContext);
+    const {formData, setFormData, jsonText, headerData,validationText, paramData, setResponseData, setResponseStatus, setBackendData } = useContext(DataContext);
     const onSendClick=()=>{
 
         
@@ -38,6 +38,7 @@ const RouteHandler = ()=>{
   
         
         const data = {
+            params: paramData,
             method: formData.type,
             headers: getHeadersAndParams(headerData)
         }

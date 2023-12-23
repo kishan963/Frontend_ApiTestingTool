@@ -9,15 +9,14 @@ import Typography from '@mui/material/Typography';
 import { DataContext } from "../Context/DataStorage";
 
 
-
-const HeadersHandler= ()=>{
+const ParamsHandler= ()=>{
    
     
-    const {headerData, setHeaderData,rows, addRows} = useContext(DataContext);
+    const {paramData, setParamData,paramRows, addParamRows} = useContext(DataContext);
      
     return(
           <div>
-        <div><Typography mt={2} mb={2}>Headers</Typography></div>
+        <div><Typography mt={2} mb={2}>Params</Typography></div>
 
         <div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
 
@@ -33,14 +32,14 @@ const HeadersHandler= ()=>{
         <TableBody>
 
           {
-            rows.map((row,index)=> (
+            paramRows.map((row,index)=> (
 
                      <AddRow
-                     addRows={addRows}
+                     addRows={addParamRows}
                       rowId={index}
                       key={index}
-                      data= {headerData}
-                      setData= {setHeaderData}
+                      data= {paramData}
+                      setData= {setParamData}
                      />
                 ))
 
@@ -56,4 +55,4 @@ const HeadersHandler= ()=>{
 
 }
 
-export default HeadersHandler;
+export default ParamsHandler;

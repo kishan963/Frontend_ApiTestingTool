@@ -13,6 +13,7 @@ const DataStorage = ({ children }) => {
     const [paramData, setParamData] = useState([]);
     const [headerData, setHeaderData] = useState([]);
     const [rows, addRows]= useState([0]);
+    const [paramRows, addParamRows]= useState([0]);
 
     return (
         <DataContext.Provider
@@ -34,7 +35,9 @@ const DataStorage = ({ children }) => {
                 validationText,
                 setValidationText,
                 backendData,
-                setBackendData
+                setBackendData,
+                paramRows,
+                addParamRows
             }}
         >
             {children}

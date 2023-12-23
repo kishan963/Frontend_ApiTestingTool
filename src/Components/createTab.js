@@ -6,6 +6,7 @@ import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import HeadersHandler from "./Headers";
 import BodyHandler from "./Body";
+import ParamsHandler from "./Params";
 
 const CreateTab= ()=> {
 
@@ -20,14 +21,16 @@ const CreateTab= ()=> {
           <TabContext value={value} indicatorColor="secondary">
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
               <TabList onChange={handleChange} aria-label="lab API tabs example">
-                <Tab label="Headers" value="1" />
-                <Tab label="Body" value="2" />
-                <Tab label="Tests" value="3" />
+                <Tab label="Params" value="1" />
+                <Tab label="Headers" value="2" />
+                <Tab label="Body" value="3" />
+                <Tab label="Tests" value="4" />
               </TabList>
             </Box>
-            <TabPanel value="1"> <HeadersHandler></HeadersHandler> </TabPanel>
-            <TabPanel value="2">  <BodyHandler/>  </TabPanel>
-            <TabPanel value="3">Item Three</TabPanel>
+            <TabPanel value="1"> <ParamsHandler/> </TabPanel>
+            <TabPanel value="2"> <HeadersHandler></HeadersHandler> </TabPanel>
+            <TabPanel value="3">  <BodyHandler/>  </TabPanel>
+            <TabPanel value="4">Item Three</TabPanel>
           </TabContext>
         </Box>
       );
