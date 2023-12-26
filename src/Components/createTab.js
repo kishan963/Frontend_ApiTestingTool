@@ -7,6 +7,7 @@ import TabPanel from '@mui/lab/TabPanel';
 import HeadersHandler from "./Headers";
 import BodyHandler from "./Body";
 import ParamsHandler from "./Params";
+import TestHandler from "./TestTab";
 
 const CreateTab= ()=> {
 
@@ -30,7 +31,7 @@ const CreateTab= ()=> {
             <TabPanel value="1"> <ParamsHandler/> </TabPanel>
             <TabPanel value="2"> <HeadersHandler></HeadersHandler> </TabPanel>
             <TabPanel value="3">  <BodyHandler/>  </TabPanel>
-            <TabPanel value="4">Item Three</TabPanel>
+            <TabPanel value="4"><TestHandler/> </TabPanel>
           </TabContext>
         </Box>
       );

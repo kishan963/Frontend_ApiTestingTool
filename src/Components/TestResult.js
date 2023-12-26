@@ -14,7 +14,6 @@ import CancelIcon from '@mui/icons-material/Cancel';
 const TestResultHandler= ()=> {
 
     const {backendData}= useContext(DataContext);
-     console.log(backendData);
    useEffect(()=>{
 
    },[backendData])

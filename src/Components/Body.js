@@ -4,14 +4,8 @@ import Typography from '@mui/material/Typography';
 import { DataContext } from "../Context/DataStorage";
 
 const BodyHandler=()=> {
-
-    const storedBody = localStorage.getItem("body");
-    const initialState = storedBody!=undefined ? storedBody : [];
-    const [bodyData, setBodyData] = useState(initialState);
     
     const {jsonText, setJsonText, validationText, setValidationText } = useContext(DataContext);
-    //console.log( JSON.parse(bodyData) );
-
     return (
         <div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
           <Typography mt={2} mb={2}>JSON</Typography>

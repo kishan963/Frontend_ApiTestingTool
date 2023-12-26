@@ -13,30 +13,27 @@ import ResponseHandler from "./Response";
 
 const RouteHandler = ()=>{
     const options = ['GET', 'POST','PUT','DELETE'];
-    const [value, setValue] = React.useState(options[0]);
     const [inputValue, setInputValue] = React.useState('');
    
-    const [error, setError] = useState(false);
-    const [errorMsg, setErrorMsg] = useState(null)
-    const [errorResponse, setErrorResponse] = useState(false);
-    const [apiResponse, setApiResponse] = useState({})
+    
    
-    const {formData, setFormData, jsonText, headerData,validationText, paramData, setResponseData, setResponseStatus, setBackendData } = useContext(DataContext);
+    const {formData, setFormData, jsonText, headerData,validationText, paramData, expectedResponse, setHistoryData, setResponseData, setResponseStatus, setBackendData } = useContext(DataContext);
     const onSendClick=()=>{
 
         
-        if(!checkParams(formData, jsonText, headerData, setErrorMsg)) {
+        if(!checkParams(formData, jsonText, headerData, expectedResponse)) {
             return false;
         }
 
          handleApiCall();
         
+         setHistoryData( prevData => [...prevData,{ formData: formData,jsonText: jsonText,expectedResponse: expectedResponse }]);
 
     }
 
     const handleApiCall= async() =>{
   
-        
+        SaveData();
         const data = {
             params: paramData,
             method: formData.type,
@@ -55,7 +52,8 @@ const RouteHandler = ()=>{
             method: formData.type,
             headers: getHeadersAndParams(headerData),
             body: JSON.parse(jsonText),
-            validation: JSON.parse(validationText)
+            validation: JSON.parse(validationText),
+            expectedRes: JSON.parse(expectedResponse)
         }
 
         const BackendResponse= await fetch("http://localhost:8080/create", 
@@ -74,6 +72,26 @@ const RouteHandler = ()=>{
          const resData= await response.json();
          setResponseData(resData);
          setResponseStatus(response.status)
+
+    }
+
+    const SaveData = async()=>{
+       
+        const BackendData = {
+            url: formData.url,
+            method: formData.type,
+            headers: JSON.stringify(getHeadersAndParams(headerData)),
+            body: JSON.stringify(jsonText),
+            validation: JSON.stringify(validationText),
+            expectedRes: JSON.stringify(expectedResponse)
+        }
+
+        const BackendResponse= await fetch("http://localhost:8080/save", 
+         {
+            method: 'POST',
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(BackendData)
+         });
 
     }
 
@@ -118,30 +136,3 @@ const RouteHandler = ()=>{
 
 export default RouteHandler;
 
-
-{/* <Box className= 'pankaj'
-        sx={{
-          width: 500,
-          maxWidth: '100%',
-        }}
-      >
-        
-
-        <Autocomplete 
-      value={value}
-      onChange={(event, newValue) => {
-        setValue(newValue);
-      }}
-      inputValue={inputValue}
-      onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue);
-      }}
-      id="controllable-states-demo"
-      options={options}
-      sx={{ width: 200 }}
-      renderInput={(params) => <TextField {...params}  />}
-    />
-       
-       <TextField fullWidth label="fullWidth" id="fullWidth" />
-
-      </Box> */}
