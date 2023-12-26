@@ -18,6 +18,7 @@ import Typography from '@mui/material/Typography';
 
 const HistoryHandler = ()=>{
     const fullHeight = window.innerHeight;
+    
     const {historyData}= useContext(DataContext);
     
     return(

@@ -1,5 +1,5 @@
 import React from "react";
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -15,9 +15,17 @@ const RouteHandler = ()=>{
     const options = ['GET', 'POST','PUT','DELETE'];
     const [inputValue, setInputValue] = React.useState('');
    
+    useEffect(() => {
+      const interval = setInterval(() => {
+        GetFromDatabase();
+      }, 5000);
+    
+      // Clear interval on component unmount to avoid memory leaks
+      return () => clearInterval(interval);
+    }, []);
     
    
-    const {formData, setFormData, jsonText, headerData,validationText, paramData, expectedResponse, setHistoryData, setResponseData, setResponseStatus, setBackendData } = useContext(DataContext);
+    const {formData, setFormData, jsonText, headerData,validationText, paramData,rows, expectedResponse, setHistoryData, setResponseData, setResponseStatus, setBackendData, updateApi } = useContext(DataContext);
     const onSendClick=()=>{
 
         
@@ -27,13 +35,21 @@ const RouteHandler = ()=>{
 
          handleApiCall();
         
-         setHistoryData( prevData => [...prevData,{ formData: formData,jsonText: jsonText,expectedResponse: expectedResponse }]);
+         console.log(updateApi.check);
+          if(updateApi.check)
+          {
+             UpdateData();
+          }
+          else
+          SaveData();
+
+        //  setHistoryData( prevData => [...prevData,{ formData: formData,jsonText: jsonText,expectedResponse: expectedResponse }]);
 
     }
 
     const handleApiCall= async() =>{
   
-        SaveData();
+        
         const data = {
             params: paramData,
             method: formData.type,
@@ -73,6 +89,24 @@ const RouteHandler = ()=>{
          setResponseData(resData);
          setResponseStatus(response.status)
 
+         
+        
+
+    }
+
+    const GetFromDatabase = async()=>{
+
+      const response= await fetch("http://localhost:8080/getAll", 
+      {
+         method: 'GET',
+         headers: { "Content-Type": "application/json" }
+      });
+     
+      
+      const jsonResponse = await response.json();
+      setHistoryData(jsonResponse);
+      console.log(jsonResponse);
+
     }
 
     const SaveData = async()=>{
@@ -80,10 +114,11 @@ const RouteHandler = ()=>{
         const BackendData = {
             url: formData.url,
             method: formData.type,
-            headers: JSON.stringify(getHeadersAndParams(headerData)),
+            headers: JSON.stringify(headerData),
             body: JSON.stringify(jsonText),
             validation: JSON.stringify(validationText),
-            expectedRes: JSON.stringify(expectedResponse)
+            expectedRes: JSON.stringify(expectedResponse),
+            row_num: JSON.stringify(rows)
         }
 
         const BackendResponse= await fetch("http://localhost:8080/save", 
@@ -94,6 +129,27 @@ const RouteHandler = ()=>{
          });
 
     }
+
+    const UpdateData = async()=>{
+       
+      const BackendData = {
+          url: formData.url,
+          method: formData.type,
+          headers: JSON.stringify(headerData),
+          body: JSON.stringify(jsonText),
+          validation: JSON.stringify(validationText),
+          expectedRes: JSON.stringify(expectedResponse),
+          row_num: JSON.stringify(rows)
+      }
+
+      const BackendResponse= await fetch(`http://localhost:8080/update/${updateApi.id}`, 
+       {
+          method: 'POST',
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(BackendData)
+       });
+
+  }
 
 
     return (  

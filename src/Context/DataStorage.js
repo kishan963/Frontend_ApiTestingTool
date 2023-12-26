@@ -16,6 +16,7 @@ const DataStorage = ({ children }) => {
     const [rows, addRows]= useState([0]);
     const [paramRows, addParamRows]= useState([0]);
     const [historyData, setHistoryData] = useState([]);
+    const [updateApi, setUpdateApi] = useState({ id: '', check: false});
 
     return (
         <DataContext.Provider
@@ -43,7 +44,9 @@ const DataStorage = ({ children }) => {
                 expectedResponse,
                 setExpectedResponse,
                 historyData, 
-                setHistoryData
+                setHistoryData,
+                updateApi,
+                setUpdateApi
             }}
         >
             {children}

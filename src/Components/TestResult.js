@@ -28,7 +28,7 @@ const TestResultHandler= ()=> {
             <TableCell align="right">description</TableCell>
           </TableRow>
         </TableHead>
-        <TableBody>{console.log(backendData)}
+        <TableBody>
           {backendData.map((row) => ( 
             
             <TableRow

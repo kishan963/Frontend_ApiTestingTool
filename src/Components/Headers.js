@@ -14,6 +14,8 @@ const HeadersHandler= ()=>{
    
     
     const {headerData, setHeaderData,rows, addRows} = useContext(DataContext);
+    console.log(rows);
+    console.log( headerData );
      
     return(
           <div>
@@ -36,7 +38,7 @@ const HeadersHandler= ()=>{
             rows.map((row,index)=> (
 
                      <AddRow
-                     addRows={addRows}
+                      addRows={addRows}
                       rowId={index}
                       key={index}
                       data= {headerData}
