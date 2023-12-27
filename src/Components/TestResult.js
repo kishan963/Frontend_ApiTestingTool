@@ -15,9 +15,9 @@ const TestResultHandler= ()=> {
 
     const {backendData}= useContext(DataContext);
    useEffect(()=>{
-
+    console.log(backendData);
    },[backendData])
-
+       
     return(
         <div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}} > 
         
@@ -37,6 +37,7 @@ const TestResultHandler= ()=> {
             >
               <TableCell component="th" scope="row">
                 { row.testRes? <CheckCircleOutlineIcon/>: <CancelIcon/> }
+                {/* {row.testRes} */}
               </TableCell>
               <TableCell align="right">{row.description}</TableCell>
             </TableRow>

@@ -4,7 +4,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import { DataContext } from "../Context/DataStorage";
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
-
+import { GetFromDatabase } from "./ApiCalls";
 
 
 
@@ -12,7 +12,7 @@ import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined
 
 const RenderRowHandler = (props)=> {
 
-  const {historyData,setFormData, setJsonText, setParamData, setHeaderData, setResponseData, setValidationText, setExpectedResponse, addRows, updateApi, setUpdateApi }= useContext(DataContext);
+  const {historyData,setFormData, setJsonText, setHeaderData,setBackendData, setValidationText, setExpectedResponse, addRows, setUpdateApi,setHistoryData,setApiDuration,setResponseLength,setResponseStatus }= useContext(DataContext);
   const { index, style } = props;
 
   
@@ -24,6 +24,10 @@ const RenderRowHandler = (props)=> {
     setValidationText( JSON.parse(historyData[index].validation));
     setExpectedResponse( JSON.parse(historyData[index].expectedRes));
     addRows( JSON.parse(historyData[index].row_num) );
+    setBackendData([]);
+    setApiDuration(0);
+    setResponseLength(0);
+    setResponseStatus(200);
     //addRows(oldArr => [...oldArr, historyData[index].row_num]);
     setUpdateApi({id: historyData[index].id, check: true});
     
@@ -37,7 +41,7 @@ const RenderRowHandler = (props)=> {
          headers: { "Content-Type": "application/json" }
       });
      
-      
+     GetFromDatabase(setHistoryData) 
   }
   
 
@@ -46,16 +50,19 @@ const RenderRowHandler = (props)=> {
 
   return (
     <ListItem style={style} key={index} component="div" disablePadding>
-      <ListItemButton>
-        <ListItemText primary={
-        <span onClick={clickHandler} >
-          <span style={{ color: '#286ac2', justifyContent:'center',alignItems:'center' }}>{historyData[index].method}</span>
-          <span>{` ${historyData[index].url}`}</span>
-           <DeleteOutlineOutlinedIcon style={{marginLeft: '12%' }} onClick={deleteHandler} />
-        </span>
-      } />
-      </ListItemButton>
-    </ListItem>
+  <ListItemButton>
+    <ListItemText primary={
+      <div onClick={clickHandler} style={{ display: 'flex', alignItems: 'center' }}>
+        <span style={{ color: '#286ac2' }}>{historyData[index].method}</span>
+        <span>{` ${historyData[index].url.substring(0, 20)}`}</span>
+        <div style={{ marginLeft: 'auto' }}>
+          <DeleteOutlineOutlinedIcon onClick={deleteHandler} />
+        </div>
+      </div>
+    } />
+  </ListItemButton>
+</ListItem>
+
   );
 
 }

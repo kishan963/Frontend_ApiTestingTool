@@ -25,10 +25,10 @@ export const checkParams = (formData, jsonText, headerData ,expectedResponse) =>
         return false;
     }
 
-    if(!checkValidJson(expectedResponse)) {
-        alert('Text is not valid json');
-        return false;
-    }
+    // if(!checkValidJson(expectedResponse)) {
+    //     alert('Text is not valid json');
+    //     return false;
+    // }
 
     return true;
 }
