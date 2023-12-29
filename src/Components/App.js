@@ -6,13 +6,16 @@ import ResponseHandler from "./Response";
 import DataStorage from "../Context/DataStorage";
 import TestResultHandler from "./TestResult";
 import HistoryHandler from "./HistoryList";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <>
       
-        
+       
           <HistoryHandler />
+          <Toaster/>
+          
         
     </>
   );

@@ -18,7 +18,8 @@ import Typography from '@mui/material/Typography';
 
 const HistoryHandler = ()=>{
     const fullHeight = window.innerHeight;
-    
+    const fullWidth = window.innerWidth;
+
     const {historyData}= useContext(DataContext);
     
     return(
@@ -44,7 +45,7 @@ const HistoryHandler = ()=>{
           <div style={{display:"flex",position: 'fixed', marginTop: 60 }}>
           
             <FixedSizeList
-              width={300}
+              width={fullWidth/4}
               height={fullHeight}
               itemSize={46}
               itemCount={historyData.length}

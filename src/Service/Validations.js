@@ -11,7 +11,7 @@ const checkValidJson = (text) => {
 
 
 
-export const checkParams = (formData, jsonText, headerData ,expectedResponse) => {
+export const checkParams = (formData, jsonText, headerData ,testScript) => {
 
     
 
@@ -25,7 +25,7 @@ export const checkParams = (formData, jsonText, headerData ,expectedResponse) =>
         return false;
     }
 
-    // if(!checkValidJson(expectedResponse)) {
+    // if(!checkValidJson(testScript)) {
     //     alert('Text is not valid json');
     //     return false;
     // }

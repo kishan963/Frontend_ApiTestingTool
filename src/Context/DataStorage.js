@@ -6,7 +6,7 @@ const DataStorage = ({ children }) => {
     
     const [formData, setFormData] = useState({ url: '', type: 'POST' })
     const [jsonText, setJsonText] = useState('');
-    const [expectedResponse, setExpectedResponse] = useState('');
+    const [testScript, setTestScript] = useState('');
     const [validationText, setValidationText] = useState('');
     const [backendData, setBackendData] = useState([]);
     const [responseStatus, setResponseStatus] = useState('500');
@@ -44,8 +44,8 @@ const DataStorage = ({ children }) => {
                 setBackendData,
                 paramRows,
                 addParamRows,
-                expectedResponse,
-                setExpectedResponse,
+                testScript,
+                setTestScript,
                 historyData, 
                 setHistoryData,
                 updateApi,

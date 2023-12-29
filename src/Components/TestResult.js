@@ -1,27 +1,31 @@
 import React, { useContext, useEffect } from "react";
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 import { DataContext } from "../Context/DataStorage";
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import CancelIcon from '@mui/icons-material/Cancel';
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import CancelIcon from "@mui/icons-material/Cancel";
 
-
-const TestResultHandler= ()=> {
-
-    const {backendData}= useContext(DataContext);
-   useEffect(()=>{
+const TestResultHandler = () => {
+  const { backendData } = useContext(DataContext);
+  useEffect(() => {
     console.log(backendData);
-   },[backendData])
-       
-    return(
-        <div style={{display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center'}} > 
-        
-      <Table sx={{ width: '82%' }} aria-label="simple table">
+  }, [backendData]);
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Table sx={{ width: "82%" }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>TestCase (passed)</TableCell>
@@ -29,26 +33,24 @@ const TestResultHandler= ()=> {
           </TableRow>
         </TableHead>
         <TableBody>
-          {backendData.map((row) => ( 
-            
+          {backendData.map((row) => (
             <TableRow
               key={row.testRes}
-              sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                { row.testRes? <CheckCircleOutlineIcon/>: <CancelIcon/> }
-                {/* {row.testRes} */}
+                {row.testRes ? (
+                  <CheckCircleOutlineIcon style={{ color: "green" }} />
+                ) : (
+                  <CancelIcon style={{ color: "red" }} />
+                )}
               </TableCell>
               <TableCell align="right">{row.description}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    
-
     </div>
-
-    );
-
-}
+  );
+};
 export default TestResultHandler;

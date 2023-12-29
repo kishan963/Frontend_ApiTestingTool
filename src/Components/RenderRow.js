@@ -12,7 +12,7 @@ import { GetFromDatabase } from "./ApiCalls";
 
 const RenderRowHandler = (props)=> {
 
-  const {historyData,setFormData, setJsonText, setHeaderData,setBackendData, setValidationText, setExpectedResponse, addRows, setUpdateApi,setHistoryData,setApiDuration,setResponseLength,setResponseStatus }= useContext(DataContext);
+  const {historyData,setFormData, setJsonText, setHeaderData,setBackendData, setValidationText, setTestScript, addRows, setUpdateApi,setHistoryData,setApiDuration,setResponseLength,setResponseStatus }= useContext(DataContext);
   const { index, style } = props;
 
   
@@ -22,7 +22,7 @@ const RenderRowHandler = (props)=> {
     setJsonText( JSON.parse(historyData[index].body) );
     setHeaderData(JSON.parse(historyData[index].headers) );
     setValidationText( JSON.parse(historyData[index].validation));
-    setExpectedResponse( JSON.parse(historyData[index].expectedRes));
+    setTestScript( JSON.parse(historyData[index].expectedRes));
     addRows( JSON.parse(historyData[index].row_num) );
     setBackendData([]);
     setApiDuration(0);
