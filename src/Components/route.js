@@ -64,6 +64,7 @@ const RouteHandler = () => {
     // Making call to the api.
     let backendRes = [];
     let jsonResponse = null;
+    let response = null;
     const data = {
       params: paramData,
       method: formData.type,
@@ -75,7 +76,7 @@ const RouteHandler = () => {
 
     try {
       const startTime = new Date();
-      const response = await fetch(formData.url, data);
+      response = await fetch(formData.url, data);
       jsonResponse = await response.json();
       const endTime = new Date();
       const duration = endTime - startTime;
@@ -128,16 +129,19 @@ const RouteHandler = () => {
     }
 
     try {
-      UserTestCase(jsonResponse, backendRes, expectedResParsed);
+      UserTestCase(response,jsonResponse, backendRes, expectedResParsed);
     } catch (error) {
       console.error("Error in Testscript " + error);
     }
   };
 
-  const UserTestCase = (jsonResponse, backendRes, expectedResParsed) => {
+  const UserTestCase = (response, jsonResponse, backendRes, expectedResParsed) => {
     // const testCases = JSON.parse(testScript);
-    const updatedBackendRes = backendRes; // Create a new array to store updated values
+    const updatedBackendRes = backendRes;
+    console.log(response); // Create a new array to store updated values
     expectedResParsed.forEach((testCase) => {
+      console.log(testCase.testCondition);
+      console.log(eval(testCase.testCondition));
       const TestResult = {
         testRes: eval(testCase.testCondition),
         description: testCase.description,

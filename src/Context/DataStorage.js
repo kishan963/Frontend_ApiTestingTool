@@ -4,9 +4,26 @@ export const DataContext = createContext(null);
 
 const DataStorage = ({ children }) => {
     
+
+    const defaultTestScript = `// response-> Response of the api, jsonResponse-> Response of api in json format.  
+    [
+      {
+        "description": "Checking the length",
+        "testCondition": "jsonResponse.length < 0"
+      },
+      {
+        "description": "Checking the fact is available",
+        "testCondition": "jsonResponse.fact != null"
+      },
+      {
+        "description": "Checking the status",
+        "testCondition": "response.status === 200"
+      }
+    ]`;
+    
     const [formData, setFormData] = useState({ url: '', type: 'POST' })
     const [jsonText, setJsonText] = useState('');
-    const [testScript, setTestScript] = useState('');
+    const [testScript, setTestScript] = useState(defaultTestScript);
     const [validationText, setValidationText] = useState('');
     const [backendData, setBackendData] = useState([]);
     const [responseStatus, setResponseStatus] = useState('500');
