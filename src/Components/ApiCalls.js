@@ -12,6 +12,7 @@ export const GetFromDatabase = async(setHistoryData)=>{
     
     const jsonResponse = await response.json();
     setHistoryData(jsonResponse);
+    console.log(jsonResponse);
     
 
   }

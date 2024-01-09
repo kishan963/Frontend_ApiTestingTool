@@ -10,7 +10,11 @@ import { getHeadersAndParams } from "../Service/Validations";
 import ResponseHandler from "./Response";
 import { GetFromDatabase } from "./ApiCalls";
 import toast from "react-hot-toast";
+import TestResultHandler from "./TestResult";
+import ImportFileHandler from "./ImportFile";
+import FileInputComponent from "./ImportFile";
 
+// Handling the method, route and api calls to the api, backend testcase, database. 
 
 const RouteHandler = () => {
   const options = ["GET", "POST", "PUT", "DELETE"];
@@ -19,6 +23,13 @@ const RouteHandler = () => {
 
   useEffect(() => {
     GetFromDatabase(setHistoryData);
+  }, []);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      GetFromDatabase(setHistoryData);
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const {
@@ -38,6 +49,7 @@ const RouteHandler = () => {
     updateApi,
     apiTestResult,
     setApiTestResult,
+    setUpdateApi,
     setApiDuration,
     setResponseLength,
   } = useContext(DataContext);
@@ -45,23 +57,25 @@ const RouteHandler = () => {
     if (!checkParams(formData, jsonText, headerData, testScript)) {
       return false;
     }
-
+    
     handleApiCall();
 
-    console.log(updateApi.check);
     if (updateApi.check) {
       UpdateData();
     } else SaveData();
 
-    setTimeout(() => {
-      GetFromDatabase(setHistoryData);
-    }, 3000);
+    // setTimeout(() => {
+    //   GetFromDatabase(setHistoryData);
+    // }, 3000);
+    
+
+    
 
     //  setHistoryData( prevData => [...prevData,{ formData: formData,jsonText: jsonText,testScript: testScript }]);
   };
 
   const handleApiCall = async () => {
-    // Making call to the api.
+    // Making call to the api and my backend api service.
     let backendRes = [];
     let jsonResponse = null;
     let response = null;
@@ -76,6 +90,7 @@ const RouteHandler = () => {
 
     try {
       const startTime = new Date();
+      // Api call 
       response = await fetch(formData.url, data);
       jsonResponse = await response.json();
       const endTime = new Date();
@@ -96,7 +111,6 @@ const RouteHandler = () => {
     //    expectedResParsed = {}; // or any default value that fits your use case
     //   }
 
-    console.log(testScript);
     try {
       expectedResParsed = JSON.parse(testScript);
     } catch (error) {
@@ -107,7 +121,9 @@ const RouteHandler = () => {
 
     if (formData.type != "GET") {
       try {
-        const BackendData = {
+        let BackendData;
+       
+         BackendData = {
           url: formData.url,
           method: formData.type,
           headers: getHeadersAndParams(headerData),
@@ -115,45 +131,68 @@ const RouteHandler = () => {
           validation: JSON.parse(validationText),
           expectedRes: expectedResParsed,
         };
+        
+        // Backend api call to get response for automated testcase and default testcase. 
         const BackendResponse = await fetch("http://localhost:8080/create", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(BackendData),
         });
         backendRes = await BackendResponse.json();
-        setBackendData(backendRes);
+        
       } catch (error) {
         alert(error);
         return;
       }
     }
-
+      setBackendData(backendRes);
+     
     try {
+      
+      if( expectedResParsed!=undefined && expectedResParsed[0]!=undefined && expectedResParsed[0].testCondition!=undefined)
       UserTestCase(response,jsonResponse, backendRes, expectedResParsed);
+      else if(testScript.length>0) {
+        if( JSON.stringify(expectedResParsed)=== JSON.stringify(jsonResponse))
+        { const updatedBackendRes = backendRes;
+          const TestResult = {
+            testRes: true,
+            description: "Expected response",
+          };
+          updatedBackendRes.push(TestResult);
+          setBackendData(updatedBackendRes);
+        }else{
+          const updatedBackendRes = backendRes;
+          const TestResult = {
+            testRes: false,
+            description: "Expected response",
+          };
+          updatedBackendRes.push(TestResult);
+          setBackendData(updatedBackendRes);
+        }
+        
+      }
     } catch (error) {
       console.error("Error in Testscript " + error);
     }
   };
 
+
+
+// User testcase is evaluated here
   const UserTestCase = (response, jsonResponse, backendRes, expectedResParsed) => {
     // const testCases = JSON.parse(testScript);
-    const updatedBackendRes = backendRes;
-    console.log(response); // Create a new array to store updated values
+    const updatedBackendRes = backendRes; // Create a new array to store updated values
     expectedResParsed.forEach((testCase) => {
-      console.log(testCase.testCondition);
-      console.log(eval(testCase.testCondition));
       const TestResult = {
         testRes: eval(testCase.testCondition),
         description: testCase.description,
       };
       updatedBackendRes.push(TestResult);
-      console.log(updatedBackendRes); // Push the new object into the updated array
+       // Push the new object into the updated array
     });
-    console.log(backendRes);
-    console.log(updatedBackendRes);
+    
     // Update state once with the new array containing all test results
     setBackendData(updatedBackendRes);
-    console.log(backendData);
   };
 
   // const GetFromDatabase = async()=>{
@@ -169,6 +208,7 @@ const RouteHandler = () => {
 
   // }
 
+  // Saving history to the database.
   const SaveData = async () => {
     const BackendData = {
       url: formData.url,
@@ -176,7 +216,7 @@ const RouteHandler = () => {
       headers: JSON.stringify(headerData),
       body: JSON.stringify(jsonText),
       validation: JSON.stringify(validationText),
-      expectedRes: JSON.stringify(testScript),
+      testScript: JSON.stringify(testScript),
       row_num: JSON.stringify(rows),
     };
 
@@ -184,9 +224,11 @@ const RouteHandler = () => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(BackendData),
-    });
+    }).then((response) => response.json());
+     setUpdateApi({ id: BackendResponse.id , check: true } )
   };
 
+  // Updating the details of current api calls.
   const UpdateData = async () => {
     const BackendData = {
       url: formData.url,
@@ -194,7 +236,7 @@ const RouteHandler = () => {
       headers: JSON.stringify(headerData),
       body: JSON.stringify(jsonText),
       validation: JSON.stringify(validationText),
-      expectedRes: JSON.stringify(testScript),
+      testScript: JSON.stringify(testScript),
       row_num: JSON.stringify(rows),
     };
 
@@ -250,7 +292,7 @@ const RouteHandler = () => {
       </div>
 
       <div>
-        <Button variant="contained" size="large" onClick={onSendClick}>
+        <Button variant="contained"  size="large" onClick={onSendClick} sx={{ width: "100px", height: "55px" }}>
           SEND
         </Button>
       </div>
