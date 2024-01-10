@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useContext, useState, useEffect } from "react";
 import Box from "@mui/material/Box";
@@ -133,7 +134,7 @@ const RouteHandler = () => {
         };
         
         // Backend api call to get response for automated testcase and default testcase. 
-        const BackendResponse = await fetch("http://localhost:8080/create", {
+        const BackendResponse = await fetch("https://backend-api-testing-tool.onrender.com/create", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(BackendData),
@@ -197,7 +198,7 @@ const RouteHandler = () => {
 
   // const GetFromDatabase = async()=>{
 
-  //   const response= await fetch("http://localhost:8080/getAll",
+  //   const response= await fetch("https://backend-api-testing-tool.onrender.com/getAll",
   //   {
   //      method: 'GET',
   //      headers: { "Content-Type": "application/json" }
@@ -241,7 +242,7 @@ const RouteHandler = () => {
     };
 
     const BackendResponse = await fetch(
-      `http://localhost:8080/update/${updateApi.id}`,
+      `https://backend-api-testing-tool.onrender.com/update/${updateApi.id}`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
