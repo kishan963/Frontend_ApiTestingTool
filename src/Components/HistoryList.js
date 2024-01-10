@@ -125,7 +125,7 @@ const HistoryHandler = () => {
       row_num: JSON.stringify(rows),
     };
   
-    const BackendResponse = await fetch("http://localhost:8080/save", {
+    const BackendResponse = await fetch("https://backend-api-testing-tool.onrender.com/save", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(BackendData),

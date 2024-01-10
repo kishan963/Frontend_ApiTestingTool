@@ -36,7 +36,7 @@ const RenderRowHandler = (props)=> {
   
   const deleteHandler= async()=>{
 
-    const response= await fetch(`http://localhost:8080/delete/${historyData[index].id}`, 
+    const response= await fetch(`https://backend-api-testing-tool.onrender.com/delete/${historyData[index].id}`, 
       {
          method: 'DELETE',
          headers: { "Content-Type": "application/json" }
